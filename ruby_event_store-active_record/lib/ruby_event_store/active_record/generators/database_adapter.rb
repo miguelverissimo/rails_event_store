@@ -40,6 +40,14 @@ module RubyEventStore
         end
       end
 
+      class LiteDB < self
+        SUPPORTED_DATA_TYPES = %w[binary].freeze
+
+        def adapter_name
+          "litedb"
+        end
+      end
+
       def initialize(data_type = NONE)
         raise UnsupportedAdapter if instance_of?(DatabaseAdapter)
 
@@ -77,6 +85,8 @@ module RubyEventStore
           MySQL.new(data_type)
         when "sqlite"
           SQLite.new(data_type)
+        when "litedb"
+          LiteDB.new(data_type)
         else
           raise UnsupportedAdapter, "Unsupported adapter: #{adapter_name.inspect}"
         end
